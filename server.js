@@ -3,6 +3,9 @@ const app = express();
 import dotenv from "dotenv";
 dotenv.config();
 
+// manejo de errores centralizados
+import "express-async-errors";
+
 // db connection
 import connectDB from "./db/connect.js";
 

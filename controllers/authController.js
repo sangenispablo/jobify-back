@@ -1,14 +1,11 @@
 import { request, response } from "express";
+import { StatusCodes } from "http-status-codes";
 
 import User from "../models/User.js";
 
-const register = async (req = request, res = response, next) => {
-  try {
-    const user = await User.create(req.body);
-    res.status(201).json({ user });
-  } catch (error) {
-    next(error);
-  }
+const register = async (req = request, res = response) => {
+  const user = await User.create(req.body);
+  res.status(StatusCodes.CREATED).json({ user });
 };
 
 const login = async (req = request, res = response) => {
