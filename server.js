@@ -1,3 +1,4 @@
+// import cors from "cors";
 import express from "express";
 const app = express();
 import dotenv from "dotenv";
@@ -17,15 +18,21 @@ import authMaterias from "./routers/materiasRouter.js";
 import notFoundMiddleware from "./middleware/not-found.js";
 import errorHandlerMiddleware from "./middleware/error-handler.js";
 
+// app.use(cors());
 app.use(express.json());
-
-app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/materias", authMaterias);
 
 // creamos una ruta main para el / como prueba
 app.get("/", (req, res) => {
-  res.send("Welcome!");
+  res.json({ msg: "Bienvenido a mi API!" });
 });
+
+// creamos una ruta main para el /api/v1 para prueba tambien
+app.get("/api/v1", (req, res) => {
+  res.json({ msg: "Welcome to my API!" });
+});
+
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/materias", authMaterias);
 
 // con esto manejo las rutas que no existen
 app.use(notFoundMiddleware);
