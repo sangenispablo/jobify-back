@@ -27,8 +27,9 @@ app.get("/", (req, res) => {
 });
 
 // creamos una ruta main para el /api/v1 para prueba tambien
-app.get("/api/v1", (req, res) => {
-  res.json({ msg: "Welcome to my API!" });
+app.post("/api/v1/pruebapost", (req, res) => {
+  console.log(req.body);
+  res.json({ msg: "Welcome to my API!", valor: 123 });
 });
 
 app.use("/api/v1/auth", authRouter);
