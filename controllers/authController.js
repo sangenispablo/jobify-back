@@ -1,7 +1,7 @@
 import { request, response } from "express";
 import { StatusCodes } from "http-status-codes";
 
-import { BadRequestError } from "../errors/index.js";
+import { BadRequestError, UnAuthenticatedError } from "../errors/index.js";
 
 import User from "../models/User.js";
 
@@ -33,7 +33,22 @@ const register = async (req = request, res = response) => {
 };
 
 const login = async (req = request, res = response) => {
-  res.send("login");
+  const { email, password } = req.body;
+  if (!email || !password) {
+    throw new BadRequestError("Please provide all values");
+  }
+  const user = await User.findOne({ email }).select("+password");
+  if (!user) {
+    throw new UnAuthenticatedError("Invalid Credential");
+  }
+  const isPasswordCorrect = await user.comparePassword(password);
+  if (!isPasswordCorrect) {
+    throw new UnAuthenticatedError("Invalid Credential");
+  }
+  const token = user.createJWT();
+  // le pongo undefined al password asi no lo devuelva en la res
+  user.password = undefined;
+  res.status(StatusCodes.OK).json({ user, token, location: user.location });
 };
 
 const updateUser = async (req = request, res = response) => {

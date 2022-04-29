@@ -7,6 +7,9 @@ dotenv.config();
 // manejo de errores centralizados
 import "express-async-errors";
 
+// morgan para mostrar que hacer el servidor pero solo en dev
+import morgan from "morgan";
+
 // db connection
 import connectDB from "./db/connect.js";
 
@@ -17,6 +20,11 @@ import authMaterias from "./routers/materiasRouter.js";
 // middlewares
 import notFoundMiddleware from "./middleware/not-found.js";
 import errorHandlerMiddleware from "./middleware/error-handler.js";
+
+// activo morgan solo en modo NO Production
+if (process.env.NODE_ENV !== "production") {
+  app.use(morgan("dev"));
+}
 
 // app.use(cors());
 app.use(express.json());

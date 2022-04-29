@@ -24,6 +24,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please provide email"],
     minlength: 6,
+    select: false,
   },
   lastName: {
     type: String,
@@ -48,6 +49,11 @@ UserSchema.methods.createJWT = function () {
   return jwt.sign({ userId: this._id }, process.env.SECRET, {
     expiresIn: process.env.EXPIRA,
   });
+};
+
+UserSchema.methods.comparePassword = async function (candidatePassword) {
+  const isMatch = await bcrypt.compare(candidatePassword, this.password);
+  return isMatch;
 };
 
 export default mongoose.model("User", UserSchema);
