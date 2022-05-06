@@ -15,11 +15,12 @@ import connectDB from "./db/connect.js";
 
 // routes
 import authRouter from "./routers/authRouters.js";
-import authMaterias from "./routers/materiasRouter.js";
+import jobsRouter from "./routers/jobsRoutes.js";
 
 // middlewares
 import notFoundMiddleware from "./middleware/not-found.js";
 import errorHandlerMiddleware from "./middleware/error-handler.js";
+import authenticateUser from "./middleware/auth.js";
 
 // activo morgan solo en modo NO Production
 if (process.env.NODE_ENV !== "production") {
@@ -41,7 +42,7 @@ app.post("/api/v1/pruebapost", (req, res) => {
 });
 
 app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/materias", authMaterias);
+app.use("/api/v1/jobs", authenticateUser, jobsRouter);
 
 // con esto manejo las rutas que no existen
 app.use(notFoundMiddleware);
